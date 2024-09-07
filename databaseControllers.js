@@ -27,6 +27,21 @@ const lastRowSQL = `SELECT * FROM blogs WHERE id = last_insert_rowid();
 const sqlRows = `SELECT * FROM blogs ;`;
 const sqlRowById = `SELECT * FROM blogs WHERE id = ?`;
 const deleteSQL = `DELETE FROM blogs WHERE id = ?;`;
+const updateSQL = `UPDATE blogs
+SET title = ?, content = ? 
+WHERE id = ?;`;
+
+export async function updatePostSQL(id, title, content, callback) {
+  const db = await new sqlite3.Database("./test.db", (err) => {
+    if (err) {
+      console.error("Error connecting to database:", err.message);
+    } else {
+      console.log("Connected to SQLite database");
+    }
+  });
+  console.log("update SQl ", id);
+  db.all(updateSQL, [title, content, id], callback);
+}
 
 export async function getLastRowSQL() {
   const db = await new sqlite3.Database("./test.db", (err) => {
